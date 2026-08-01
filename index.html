@@ -412,9 +412,17 @@
 
     // ==========================================
     // 🔧 Supabase 設定區 (保留原本設定)
+    // 說明：URL 與 Key 以 Base64 編碼方式儲存，避免原始字串
+    // 直接出現在原始碼中被一眼看穿（純肉眼混淆，非加密）。
+    // 瀏覽器執行時會自動解碼還原成正確的字串再建立連線。
+    // 注意：這組 Key 屬於 Supabase 的「publishable / anon」金鑰，
+    // 本來就設計成會出現在前端程式碼中，其安全性應由 Supabase
+    // 的 RLS (Row Level Security) 規則來把關，而非靠隱藏字串。
     // ==========================================
-    const SUPABASE_URL  = 'https://efxbtzgybfftfpwbwyfc.supabase.co';
-    const SUPABASE_KEY  = 'sb_publishable_TybWhCkEb9YTu7oFsAwRng_ElIofO7p';
+    const _decode = (b64) => atob(b64);
+
+    const SUPABASE_URL  = _decode('aHR0cHM6Ly9lZnhidHpneWJmZnRmcHdid3lmYy5zdXBhYmFzZS5jbw==');
+    const SUPABASE_KEY  = _decode('c2JfcHVibGlzaGFibGVfVHliV2hDa0ViOVlUdTdvRnNBd1JuZ19FbElvZk83cA==');
     const ORDERS_TABLE  = 'orders'; 
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
