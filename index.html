@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>SEOUL VIBE | 韓系質感服飾</title>
+  <meta name="description" content="SEOUL VIBE 打造您的專屬韓系品味，精心挑選的質感服飾，直送您的衣櫃。">
+
+  <!-- PWA: Web App Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111111">
+
+  <!-- PWA: iOS Safari 支援 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="SEOUL VIBE">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+
+  <!-- Tailwind CSS & Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google tag (gtag.js) GA4 監控代碼 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JQEE2PLNR8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-JQEE2PLNR8');
+  </script>
+
+  <style>
+    /* 引入更具時尚感、現代簡約的字體 */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@400;600;700&display=swap');
+    
+    body { 
+      font-family: 'Noto Sans TC', sans-serif; 
+    }
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* 調整為韓系網拍的極簡風格設定 */
+    .bg-main { background-color: #FAFAFA; } /* 極淺灰白 */
+    .text-brand { color: #111111; } /* 深邃黑 */
+    .bg-brand { background-color: #111111; }
+    .hover-bg-brand:hover { background-color: #333333; } 
+    .border-brand { border-color: #111111; }
+    .ring-brand-focus { focus:ring-[#111111]/20; }
+    .text-muted { color: #888888; } /* 柔和灰 */
+
+    /* 動畫效果 */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translate(-50%, 20px); }
+      to   { opacity: 1; transform: translate(-50%, 0); }
+    }
+    .animate-fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .animate-fade-in { animation: fadeIn 0.8s ease forwards; }
+
+    /* 隱藏滾動條但保留功能 */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* PWA / RWD：適配含瀏海與手勢列的裝置（standalone 模式時尤其重要） */
+    nav.fixed.top-0 {
+      padding-top: env(safe-area-inset-top);
+    }
+    footer {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    #mobileMenuBody, #cartDrawer #drawerBody {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* 行動選單抽屜 */
+    #mobileMenuBody {
+      transform: translateX(-100%);
+    }
+    #mobileMenuBody.menu-open {
+      transform: translateX(0);
+    }
+
+    /* 搜尋列展開效果 */
+    #searchBar {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #searchBar.search-open {
+      max-height: 80px;
+    }
+
+    /* 已安裝為 App / 全螢幕模式時的樣式微調 */
+    @media (display-mode: standalone) {
+      nav.fixed.top-0 { padding-top: max(env(safe-area-inset-top), 12px); }
+    }
+  </style>
+</head>
+<body class="bg-main text-stone-900 min-h-screen relative overflow-x-hidden selection:bg-stone-900 selection:text-white">
+
+  <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md z-40 border-b border-stone-100 transition-all duration-300">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
+      
+      <!-- 左側：選單與搜尋 -->
+      <div class="flex items-center gap-6 flex-1">
+        <button id="menuBtn" aria-label="Open menu" class="text-stone-800 hover:text-stone-500 transition-colors focus:outline-none">
+          <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+        </button>
+        <button id="searchBtn" aria-label="Toggle search" class="text-stone-800 hover:text-stone-500 transition-colors focus:outline-none">
+          <i data-lucide="search" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- 中間：Logo -->
+      <div class="flex-1 flex justify-center cursor-pointer">
+        <h1 class="text-2xl sm:text-3xl font-serif font-bold tracking-widest text-brand">SEOUL VIBE</h1>
+      </div>
+
+      <!-- 右側：會員與購物車 -->
+      <div class="flex items-center justify-end gap-6 flex-1">
+        <button class="hidden sm:block text-stone-800 hover:text-stone-500 transition-colors focus:outline-none">
+          <i data-lucide="user" class="w-5 h-5"></i>
+        </button>
+        <button id="cartBtn" class="relative text-stone-800 hover:text-stone-500 transition-colors flex items-center gap-2 focus:outline-none">
+          <i data-lucide="shopping-bag" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+          <span id="cartBadge" class="hidden absolute -top-1.5 -right-1.5 bg-brand text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 搜尋列（展開/收合） -->
+    <div id="searchBar" class="border-t border-stone-100 bg-white">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-8 py-4">
+        <div class="flex items-center gap-3 border-b border-stone-300 pb-2">
+          <i data-lucide="search" class="w-4 h-4 text-stone-400"></i>
+          <input id="searchInput" type="text" placeholder="搜尋商品名稱或描述..." class="w-full bg-transparent text-sm focus:outline-none placeholder-stone-400" />
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 行動選單抽屜 -->
+  <div id="mobileMenu" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div id="mobileMenuOverlay" class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+    <div id="mobileMenuBody" class="absolute inset-y-0 left-0 max-w-[320px] w-full bg-white flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+      <div class="px-6 py-6 flex items-center justify-between border-b border-stone-100">
+        <h2 class="text-lg font-serif font-bold tracking-widest">SEOUL VIBE</h2>
+        <button id="closeMenuBtn" aria-label="Close menu" class="text-stone-400 hover:text-brand transition-colors focus:outline-none">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <nav class="flex-1 overflow-y-auto px-6 py-8 no-scrollbar">
+        <p class="text-xs text-stone-400 uppercase tracking-widest mb-4">Shop by Category</p>
+        <ul class="space-y-1 mb-10">
+          <li><a href="#" data-category="all" class="mobile-category-link block py-3 text-sm tracking-widest uppercase text-brand border-b border-stone-100">All</a></li>
+          <li><a href="#" data-category="tops" class="mobile-category-link block py-3 text-sm tracking-widest uppercase text-stone-500 border-b border-stone-100">Tops</a></li>
+          <li><a href="#" data-category="dresses" class="mobile-category-link block py-3 text-sm tracking-widest uppercase text-stone-500 border-b border-stone-100">Dresses</a></li>
+          <li><a href="#" data-category="outerwear" class="mobile-category-link block py-3 text-sm tracking-widest uppercase text-stone-500 border-b border-stone-100">Outerwear</a></li>
+          <li><a href="#" data-category="accessories" class="mobile-category-link block py-3 text-sm tracking-widest uppercase text-stone-500 border-b border-stone-100">Accessories</a></li>
+        </ul>
+        <p class="text-xs text-stone-400 uppercase tracking-widest mb-4">Customer Care</p>
+        <ul class="space-y-3 text-sm text-stone-500 font-light">
+          <li><a href="#" class="hover:text-brand transition-colors">聯絡我們</a></li>
+          <li><a href="#" class="hover:text-brand transition-colors">運送與退換貨</a></li>
+          <li><a href="#" class="hover:text-brand transition-colors">常見問題</a></li>
+          <li><a href="#" class="hover:text-brand transition-colors">尺寸指南</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <section class="pt-16 sm:pt-20 pb-0">
+    <div class="relative h-[70vh] sm:h-[85vh] w-full bg-stone-200 overflow-hidden animate-fade-in">
+      <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Spring Collection" class="w-full h-full object-cover object-center" />
+      <div class="absolute inset-0 bg-black/20"></div>
+      
+      <!-- 文字疊加 -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+        <h2 class="text-white text-sm tracking-[0.3em] uppercase mb-4 opacity-90">2026 Spring / Summer</h2>
+        <h3 class="text-white text-4xl sm:text-6xl font-serif font-semibold tracking-wider mb-8 drop-shadow-md">New Arrival</h3>
+        <button class="bg-white/90 hover:bg-white text-brand px-10 py-3 sm:py-4 text-sm tracking-widest uppercase transition-all duration-300 hover:scale-105">
+          Shop Now
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-8 sm:py-12 border-b border-stone-200">
+    <div id="categoryNav" class="max-w-screen-xl mx-auto px-4 flex justify-center gap-8 sm:gap-16 text-sm tracking-widest uppercase overflow-x-auto no-scrollbar whitespace-nowrap">
+      <a href="#" data-category="all" class="category-link text-brand font-medium border-b-2 border-brand pb-1">All</a>
+      <a href="#" data-category="tops" class="category-link text-stone-400 hover:text-brand transition-colors pb-1 border-b-2 border-transparent">Tops</a>
+      <a href="#" data-category="dresses" class="category-link text-stone-400 hover:text-brand transition-colors pb-1 border-b-2 border-transparent">Dresses</a>
+      <a href="#" data-category="outerwear" class="category-link text-stone-400 hover:text-brand transition-colors pb-1 border-b-2 border-transparent">Outerwear</a>
+      <a href="#" data-category="accessories" class="category-link text-stone-400 hover:text-brand transition-colors pb-1 border-b-2 border-transparent">Accessories</a>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-24 px-4 sm:px-8 max-w-screen-2xl mx-auto">
+    <div class="text-center mb-16">
+      <h3 class="text-3xl font-serif font-bold text-brand mb-3">Trending Now</h3>
+      <p class="text-muted text-sm tracking-wide">本週人氣熱銷單品</p>
+    </div>
+    
+    <!-- 網格佈局：更緊湊，大圖展示 -->
+    <div id="productGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 sm:gap-x-8 gap-y-12 sm:gap-y-16">
+      <!-- 內容由 JS 動態生成 -->
+    </div>
+  </section>
+
+  <section class="py-24 bg-stone-100 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <h3 class="text-2xl sm:text-3xl font-serif font-bold text-brand mb-6 tracking-wide">Timeless Elegance.</h3>
+      <p class="text-stone-500 leading-loose text-sm sm:text-base font-light mb-8">
+        專注於剪裁與質感的細節，以極簡的韓系美學為基調。<br class="hidden sm:block">
+        我們相信，真正的時尚不是追逐潮流，而是找到適合自己的經典風格。<br>
+        每一件單品，都是為了展現您獨特的氣質而存在。
+      </p>
+      <a href="#" class="inline-block border-b border-brand pb-1 text-sm tracking-widest hover:text-stone-500 transition-colors uppercase">Read Our Story</a>
+    </div>
+  </section>
+
+  <footer class="bg-white pt-16 pb-8 border-t border-stone-200">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div class="col-span-1 md:col-span-1">
+          <h4 class="text-xl font-serif font-bold tracking-widest mb-6">SEOUL VIBE</h4>
+          <p class="text-sm text-stone-500 leading-relaxed font-light">打造您的專屬韓系品味。我們提供精心挑選的質感服飾，直送您的衣櫃。</p>
+        </div>
+        <div>
+          <h5 class="text-sm font-bold tracking-widest uppercase mb-4">Customer Care</h5>
+          <ul class="space-y-3 text-sm text-stone-500 font-light">
+            <li><a href="#" class="hover:text-brand transition-colors">聯絡我們</a></li>
+            <li><a href="#" class="hover:text-brand transition-colors">運送與退換貨</a></li>
+            <li><a href="#" class="hover:text-brand transition-colors">常見問題</a></li>
+            <li><a href="#" class="hover:text-brand transition-colors">尺寸指南</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="text-sm font-bold tracking-widest uppercase mb-4">About Us</h5>
+          <ul class="space-y-3 text-sm text-stone-500 font-light">
+            <li><a href="#" class="hover:text-brand transition-colors">品牌故事</a></li>
+            <li><a href="#" class="hover:text-brand transition-colors">實體門市</a></li>
+            <li><a href="#" class="hover:text-brand transition-colors">加入我們</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="text-sm font-bold tracking-widest uppercase mb-4">Newsletter</h5>
+          <p class="text-sm text-stone-500 font-light mb-4">訂閱電子報，獲取最新商品資訊與專屬優惠。</p>
+          <div class="flex border-b border-stone-300 pb-2">
+            <input type="email" placeholder="Email Address" class="w-full bg-transparent text-sm focus:outline-none placeholder-stone-400" />
+            <button class="text-sm tracking-widest uppercase hover:text-stone-500 transition-colors">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-stone-400 font-light pt-8 border-t border-stone-100 flex flex-col sm:flex-row justify-between items-center">
+        <p>© 2026 SEOUL VIBE. All rights reserved.</p>
+        <div class="flex gap-4 mt-4 sm:mt-0">
+          <a href="#" class="hover:text-brand transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+          <a href="#" class="hover:text-brand transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div id="cartOverlay" class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+    <div class="absolute inset-y-0 right-0 max-w-[400px] w-full bg-white flex flex-col transform transition-transform duration-500 translate-x-full ease-[cubic-bezier(0.16,1,0.3,1)]" id="drawerBody">
+      
+      <!-- 購物車標題 -->
+      <div class="px-6 py-6 flex items-center justify-between border-b border-stone-100">
+        <h2 class="text-lg font-bold tracking-widest uppercase flex items-center gap-2">
+          Cart <span id="drawerCount" class="text-xs text-stone-400 font-normal">(0)</span>
+        </h2>
+        <button id="closeCartBtn" class="text-stone-400 hover:text-brand transition-colors focus:outline-none">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      
+      <!-- 購物車內容區塊 -->
+      <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 flex flex-col gap-6 no-scrollbar">
+        <!-- 內容由 JS 動態生成 -->
+      </div>
+      
+      <!-- 購物車底部結帳區 -->
+      <div id="cartFooter" class="p-6 bg-stone-50/50 border-t border-stone-100 hidden">
+        <div class="flex justify-between items-center mb-6">
+          <span class="text-sm font-medium uppercase tracking-widest">Subtotal</span>
+          <span id="cartTotalAmount" class="text-lg font-serif font-bold">NT$ 0</span>
+        </div>
+        <p class="text-xs text-stone-500 font-light mb-6 text-center">運費與折扣將於結帳步驟計算。</p>
+        <button id="checkoutBtn" class="w-full bg-brand hover-bg-brand text-white py-4 text-sm font-bold tracking-widest uppercase transition-colors focus:outline-none">
+          Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customerModal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white p-6 sm:p-10 max-w-lg w-full transform scale-95 opacity-0 transition-all duration-300 relative" id="customerModalBody">
+      
+      <!-- 關閉按鈕 -->
+      <button id="closeCustomerBtn" class="absolute top-6 right-6 text-stone-400 hover:text-brand transition-colors focus:outline-none">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center mb-8">
+        <h3 class="text-2xl font-serif font-bold tracking-widest mb-2">Checkout Details</h3>
+        <p class="text-xs text-stone-400 uppercase tracking-wider">填寫收件與付款資訊</p>
+      </div>
+
+      <form id="orderForm" class="space-y-5">
+        <div class="space-y-4">
+          <!-- 姓名 -->
+          <div>
+            <label class="block text-xs font-bold text-stone-600 uppercase tracking-widest mb-2">Name *</label>
+            <input type="text" id="custName" required placeholder="收件人姓名"
+              class="w-full px-0 py-3 border-b border-stone-300 bg-transparent focus:outline-none focus:border-brand transition-colors text-sm rounded-none" />
+          </div>
+          <!-- 電話 -->
+          <div>
+            <label class="block text-xs font-bold text-stone-600 uppercase tracking-widest mb-2">Phone *</label>
+            <input type="tel" id="custPhone" required placeholder="手機號碼 (例: 0912345678)" pattern="^09[0-9]{8}$"
+              class="w-full px-0 py-3 border-b border-stone-300 bg-transparent focus:outline-none focus:border-brand transition-colors text-sm rounded-none" />
+          </div>
+          <!-- 地址 -->
+          <div>
+            <label class="block text-xs font-bold text-stone-600 uppercase tracking-widest mb-2">Address *</label>
+            <input type="text" id="custAddress" required placeholder="完整配送地址"
+              class="w-full px-0 py-3 border-b border-stone-300 bg-transparent focus:outline-none focus:border-brand transition-colors text-sm rounded-none" />
+          </div>
+          <!-- 帳號後五碼 -->
+          <div>
+            <label class="block text-xs font-bold text-stone-600 uppercase tracking-widest mb-2 flex justify-between items-end">
+              Bank Account *
+              <span class="text-[10px] text-stone-400 font-normal lowercase tracking-normal">銀行轉帳末 5 碼</span>
+            </label>
+            <input type="text" id="custAccount" required placeholder="12345" maxlength="5" pattern="[0-9]{5}"
+              class="w-full px-0 py-3 border-b border-stone-300 bg-transparent focus:outline-none focus:border-brand transition-colors text-sm rounded-none font-mono" />
+          </div>
+        </div>
+
+        <div class="pt-8 flex flex-col gap-3">
+          <button type="submit" id="submitOrderBtn"
+            class="w-full bg-brand hover-bg-brand text-white py-4 text-sm font-bold tracking-widest uppercase transition-colors flex justify-center items-center gap-2 focus:outline-none relative">
+            <span id="submitBtnText">Place Order</span>
+            <!-- 載入動畫 -->
+            <div id="submitSpinner" class="absolute inset-0 flex items-center justify-center bg-brand hidden">
+              <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            </div>
+          </button>
+          <button type="button" id="backToCartBtn"
+            class="w-full py-4 text-sm font-bold tracking-widest uppercase text-stone-500 hover:text-brand transition-colors focus:outline-none">
+            Back to Cart
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[70] bg-brand text-white px-8 py-4 flex items-center gap-3 hidden shadow-xl min-w-[300px] justify-center">
+    <i data-lucide="check" class="w-4 h-4"></i>
+    <span id="toastText" class="text-sm tracking-wide font-light">Added to cart successfully.</span>
+  </div>
+
+  <!-- 結帳成功 -->
+  <div id="successModal" class="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white p-10 max-w-md w-full text-center transform scale-95 opacity-0 transition-all duration-300" id="modalBody">
+      <div class="mb-8">
+        <i data-lucide="check-circle" class="text-stone-800 w-16 h-16 mx-auto mb-4 stroke-1"></i>
+        <h3 class="text-2xl font-serif font-bold tracking-widest uppercase mb-4">Order Confirmed</h3>
+        <p class="text-stone-500 text-sm leading-loose font-light">
+          感謝您的購買。<br>您的訂單已成功送出，我們將盡快為您安排出貨。
+        </p>
+      </div>
+      <button id="modalCloseBtn" class="w-full border border-brand hover:bg-brand hover:text-white text-brand py-4 text-sm font-bold tracking-widest uppercase transition-colors focus:outline-none">
+        Continue Shopping
+      </button>
+    </div>
+  </div>
+
+  <!-- 錯誤提示 -->
+  <div id="errorModal" class="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center px-4 hidden opacity-0 transition-opacity duration-300">
+    <div class="bg-white p-10 max-w-md w-full text-center transform scale-95 opacity-0 transition-all duration-300" id="errorModalBody">
+      <div class="mb-8">
+        <i data-lucide="alert-circle" class="text-red-600 w-16 h-16 mx-auto mb-4 stroke-1"></i>
+        <h3 class="text-xl font-serif font-bold tracking-widest uppercase mb-4">Oops, Something went wrong</h3>
+        <p id="errorMessage" class="text-stone-500 text-sm font-light">發生未知錯誤，請稍後再試。</p>
+      </div>
+      <button id="errorCloseBtn" class="w-full bg-stone-200 hover:bg-stone-300 text-stone-800 py-4 text-sm font-bold tracking-widest uppercase transition-colors focus:outline-none">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // ==========================================
+    // 🔧 Supabase 設定區 (保留原本設定)
+    // ==========================================
+    const SUPABASE_URL  = 'https://fywjqwvxbuobkmwrofvu.supabase.co';
+    const SUPABASE_KEY  = 'sb_publishable_OobRxK7fL8QkGfry08MwEQ_ZxzNekVu';
+    const ORDERS_TABLE  = 'orders'; 
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ==========================================
+    // 服飾商品資料 (韓系網拍風格)
+    // ==========================================
+    const PRODUCTS = [
+      { 
+        id: 1, 
+        name: "Minimalist Trench Coat", 
+        description: "經典雙排扣風衣，俐落剪裁，秋季必備", 
+        price: 3280, 
+        image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "outerwear" 
+      },
+      { 
+        id: 2, 
+        name: "Silk Slip Dress", 
+        description: "細肩帶絲質緞面洋裝，垂墜感極佳", 
+        price: 1850, 
+        image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "dresses" 
+      },
+      { 
+        id: 3, 
+        name: "Oversized Linen Blazer", 
+        description: "亞麻混紡寬版西裝外套，慵懶都會感", 
+        price: 2400, 
+        image: "https://images.unsplash.com/photo-1550614000-4b95dd52fa0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "outerwear" 
+      },
+      { 
+        id: 4, 
+        name: "Ribbed Knit Top", 
+        description: "坑條針織合身上衣，微透膚顯瘦款", 
+        price: 980, 
+        image: "https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "tops" 
+      },
+      { 
+        id: 5, 
+        name: "Straight-Leg Denim", 
+        description: "復古水洗直筒牛仔褲，修飾腿型", 
+        price: 1680, 
+        image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "bottoms" 
+      },
+      { 
+        id: 6, 
+        name: "Leather Mini Bag", 
+        description: "真皮迷你手提包，立體幾何造型", 
+        price: 2100, 
+        image: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "accessories" 
+      },
+      { 
+        id: 7, 
+        name: "Cashmere Cardigan", 
+        description: "喀什米爾羊絨針織外套，親膚柔軟", 
+        price: 2980, 
+        image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "outerwear" 
+      },
+      { 
+        id: 8, 
+        name: "Pleated Midi Skirt", 
+        description: "不對稱百褶中長裙，飄逸氣質", 
+        price: 1450, 
+        image: "https://images.unsplash.com/photo-1583496661160-c5dcb225f82c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+        category: "bottoms" 
+      }
+    ];
+
+    // 全域購物車
+    let cart = [];
+
+    // ==========================================
+    // GA4 追蹤函數封裝 (與原需求完全一致)
+    // ==========================================
+    
+    // 1. 查看商品: view_item
+    function trackViewItem(product) {
+      gtag('event', 'view_item', {
+        currency: 'TWD',
+        value: product.price,
+        items: [{
+          item_id: product.id,
+          item_name: product.name,
+          item_category: product.category,
+          price: product.price,
+          quantity: 1
+        }]
+      });
+      console.log(`[GA4 Event] view_item: ${product.name}`);
+    }
+
+    // 2. 加入購物車: add_to_cart
+    function trackAddToCart(product, quantity = 1) {
+      gtag('event', 'add_to_cart', {
+        currency: 'TWD',
+        value: product.price * quantity,
+        items: [{
+          item_id: product.id,
+          item_name: product.name,
+          item_category: product.category,
+          price: product.price,
+          quantity: quantity
+        }]
+      });
+      console.log(`[GA4 Event] add_to_cart: ${product.name}`);
+    }
+
+    // 3. 看購物車: view_cart
+    function trackViewCart() {
+      const totalAmount = cart.reduce((a, i) => a + i.price * i.quantity, 0);
+      gtag('event', 'view_cart', {
+        currency: 'TWD',
+        value: totalAmount,
+        items: cart.map(item => ({
+          item_id: item.id,
+          item_name: item.name,
+          item_category: item.category,
+          price: item.price,
+          quantity: item.quantity
+        }))
+      });
+      console.log(`[GA4 Event] view_cart, Total: ${totalAmount}`);
+    }
+
+    // 4. 從購物車移出: remove_from_cart
+    function trackRemoveFromCart(product) {
+      gtag('event', 'remove_from_cart', {
+        currency: 'TWD',
+        value: product.price * product.quantity,
+        items: [{
+          item_id: product.id,
+          item_name: product.name,
+          item_category: product.category,
+          price: product.price,
+          quantity: product.quantity
+        }]
+      });
+      console.log(`[GA4 Event] remove_from_cart: ${product.name}`);
+    }
+
+    // 5. 開始結帳: begin_checkout
+    function trackBeginCheckout() {
+      const totalAmount = cart.reduce((a, i) => a + i.price * i.quantity, 0);
+      gtag('event', 'begin_checkout', {
+        currency: 'TWD',
+        value: totalAmount,
+        items: cart.map(item => ({
+          item_id: item.id,
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        }))
+      });
+      console.log(`[GA4 Event] begin_checkout, Total: ${totalAmount}`);
+    }
+
+    // 6. 填寫付款資訊: add_payment_info
+    function trackAddPaymentInfo() {
+      const totalAmount = cart.reduce((a, i) => a + i.price * i.quantity, 0);
+      gtag('event', 'add_payment_info', {
+        currency: 'TWD',
+        value: totalAmount,
+        payment_type: 'Bank Transfer',
+        items: cart.map(item => ({
+          item_id: item.id,
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        }))
+      });
+      console.log(`[GA4 Event] add_payment_info`);
+    }
+
+    // 7. 完成購買: purchase
+    function trackPurchase(transactionId) {
+      const totalAmount = cart.reduce((a, i) => a + i.price * i.quantity, 0);
+      gtag('event', 'purchase', {
+        transaction_id: transactionId,
+        currency: 'TWD',
+        value: totalAmount,
+        items: cart.map(item => ({
+          item_id: item.id,
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        }))
+      });
+      console.log(`[GA4 Event] purchase, Transaction ID: ${transactionId}`);
+    }
+
+
+    // ==========================================
+    // DOM 元素選取
+    // ==========================================
+    const productGrid       = document.getElementById('productGrid');
+
+    // 行動選單 & 搜尋
+    const menuBtn            = document.getElementById('menuBtn');
+    const closeMenuBtn       = document.getElementById('closeMenuBtn');
+    const mobileMenu         = document.getElementById('mobileMenu');
+    const mobileMenuOverlay  = document.getElementById('mobileMenuOverlay');
+    const mobileMenuBody     = document.getElementById('mobileMenuBody');
+    const searchBtn          = document.getElementById('searchBtn');
+    const searchBar          = document.getElementById('searchBar');
+    const searchInput        = document.getElementById('searchInput');
+
+    // UI 元件
+    const cartBtn           = document.getElementById('cartBtn');
+    const cartBadge         = document.getElementById('cartBadge');
+    const cartDrawer        = document.getElementById('cartDrawer');
+    const cartOverlay       = document.getElementById('cartOverlay');
+    const drawerBody        = document.getElementById('drawerBody');
+    const closeCartBtn      = document.getElementById('closeCartBtn');
+    
+    // 購物車內容區
+    const cartItemsContainer= document.getElementById('cartItemsContainer');
+    const cartFooter        = document.getElementById('cartFooter');
+    const cartTotalAmount   = document.getElementById('cartTotalAmount');
+    const drawerCount       = document.getElementById('drawerCount');
+    
+    // 結帳 Modal
+    const checkoutBtn       = document.getElementById('checkoutBtn');
+    const customerModal     = document.getElementById('customerModal');
+    const customerModalBody = document.getElementById('customerModalBody');
+    const closeCustomerBtn  = document.getElementById('closeCustomerBtn');
+    const backToCartBtn     = document.getElementById('backToCartBtn');
+    
+    // 表單相關
+    const orderForm         = document.getElementById('orderForm');
+    const submitOrderBtn    = document.getElementById('submitOrderBtn');
+    const submitBtnText     = document.getElementById('submitBtnText');
+    const submitSpinner     = document.getElementById('submitSpinner');
+    
+    // 提示與狀態 Modal
+    const toast             = document.getElementById('toast');
+    const toastText         = document.getElementById('toastText');
+    const successModal      = document.getElementById('successModal');
+    const modalBody         = document.getElementById('modalBody');
+    const modalCloseBtn     = document.getElementById('modalCloseBtn');
+    const errorModal        = document.getElementById('errorModal');
+    const errorModalBody    = document.getElementById('errorModalBody');
+    const errorMessage      = document.getElementById('errorMessage');
+    const errorCloseBtn     = document.getElementById('errorCloseBtn');
+
+    // ==========================================
+    // 渲染邏輯
+    // ==========================================
+    
+    // 商品篩選狀態（分類 + 搜尋關鍵字）
+    let currentCategory = 'all';
+    let currentSearchTerm = '';
+
+    function getFilteredProducts() {
+      return PRODUCTS.filter(p => {
+        const matchesCategory = currentCategory === 'all' || p.category === currentCategory;
+        const keyword = currentSearchTerm.trim().toLowerCase();
+        const matchesSearch = !keyword || p.name.toLowerCase().includes(keyword) || p.description.toLowerCase().includes(keyword);
+        return matchesCategory && matchesSearch;
+      });
+    }
+
+    // 渲染商品列表 (韓系簡約卡片)
+    function renderProducts() {
+      const filtered = getFilteredProducts();
+
+      if (filtered.length === 0) {
+        productGrid.innerHTML = `
+          <div class="col-span-2 lg:col-span-4 flex flex-col items-center justify-center py-20 text-stone-400 gap-4">
+            <i data-lucide="search-x" class="w-10 h-10 stroke-1"></i>
+            <p class="text-sm tracking-widest uppercase font-light">No products found.</p>
+          </div>`;
+        lucide.createIcons();
+        return;
+      }
+
+      productGrid.innerHTML = filtered.map(p => `
+        <div class="group flex flex-col cursor-pointer">
+          <!-- 圖片區塊 -->
+          <div class="relative aspect-[3/4] overflow-hidden bg-stone-100 mb-4" onclick="handleViewItem(${p.id})">
+            <img src="${p.image}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" />
+            
+            <!-- 懸浮加入購物車按鈕 (極簡設計) -->
+            <div class="absolute inset-x-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 flex justify-center">
+              <button onclick="event.stopPropagation(); handleAddToCart(${p.id})" class="bg-brand text-white w-full py-3 text-xs tracking-widest uppercase hover:bg-stone-800 transition-colors shadow-lg flex items-center justify-center gap-2">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i> Add
+              </button>
+            </div>
+          </div>
+          <!-- 文字資訊區塊 -->
+          <div class="text-left flex flex-col" onclick="handleViewItem(${p.id})">
+            <h4 class="text-sm font-bold text-brand mb-1 hover:text-stone-500 transition-colors">${p.name}</h4>
+            <p class="text-xs text-stone-400 font-light mb-2 line-clamp-1">${p.description}</p>
+            <p class="text-sm font-medium">NT. ${p.price.toLocaleString()}</p>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // 購物車業務邏輯
+    // ==========================================
+
+    function handleViewItem(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if(product) {
+        trackViewItem(product);
+        // 可選：跳轉到商品詳情頁，這裡用 toast 模擬
+        showToast(`Viewing: ${product.name}`);
+      }
+    }
+
+    function handleAddToCart(productId) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+      
+      const existing = cart.find(i => i.id === productId);
+      if (existing) { 
+        existing.quantity += 1; 
+      } else { 
+        cart.push({ ...product, quantity: 1 }); 
+      }
+      
+      trackAddToCart(product, 1);
+      updateCartUI();
+      showToast('Item added to your cart.');
+    }
+
+    function handleRemoveItem(id) {
+      const itemToRemove = cart.find(i => i.id === id);
+      if(itemToRemove) {
+        trackRemoveFromCart(itemToRemove);
+      }
+      cart = cart.filter(i => i.id !== id);
+      updateCartUI();
+    }
+
+    function changeQuantity(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (item) { 
+        const q = item.quantity + delta; 
+        if (q > 0) {
+            item.quantity = q;
+        } else if (q === 0) {
+            handleRemoveItem(id); // 數量減到0視為移除
+            return;
+        }
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalCount  = cart.reduce((a, i) => a + i.quantity, 0);
+      const totalAmount = cart.reduce((a, i) => a + i.price * i.quantity, 0);
+
+      // 更新紅點 Badge
+      cartBadge.textContent = totalCount;
+      totalCount > 0 ? cartBadge.classList.remove('hidden') : cartBadge.classList.add('hidden');
+      drawerCount.textContent = `(${totalCount})`;
+
+      if (cart.length === 0) {
+        // 空購物車狀態
+        cartItemsContainer.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full text-stone-400 gap-6 mt-10">
+            <i data-lucide="shopping-bag" class="w-12 h-12 stroke-1"></i>
+            <p class="text-sm tracking-widest uppercase font-light">Your cart is empty.</p>
+            <button onclick="toggleDrawer(false)" class="text-xs uppercase tracking-widest border-b border-stone-300 pb-1 hover:text-brand hover:border-brand transition-colors mt-4">Continue Shopping</button>
+          </div>`;
+        cartFooter.classList.add('hidden');
+      } else {
+        // 購物車商品列表 (韓系簡約列表)
+        cartItemsContainer.innerHTML = cart.map(item => `
+          <div class="flex gap-4 border-b border-stone-100 pb-6 mb-2">
+            <div class="w-24 h-32 flex-shrink-0 bg-stone-100 overflow-hidden">
+              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex-1 flex flex-col justify-between pt-1">
+              <div>
+                <div class="flex justify-between items-start mb-1">
+                  <h4 class="text-sm font-bold text-brand leading-tight pr-4">${item.name}</h4>
+                  <button onclick="handleRemoveItem(${item.id})" class="text-stone-300 hover:text-stone-800 transition-colors focus:outline-none" aria-label="Remove item">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                  </button>
+                </div>
+                <p class="text-xs text-stone-400 font-light mb-4">Size: F</p>
+              </div>
+              <div class="flex justify-between items-end">
+                <!-- 數量控制 -->
+                <div class="flex items-center border border-stone-200">
+                  <button onclick="changeQuantity(${item.id}, -1)" class="w-8 h-8 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors focus:outline-none">
+                    <i data-lucide="minus" class="w-3 h-3"></i>
+                  </button>
+                  <span class="text-xs font-medium w-6 text-center">${item.quantity}</span>
+                  <button onclick="changeQuantity(${item.id}, 1)" class="w-8 h-8 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors focus:outline-none">
+                    <i data-lucide="plus" class="w-3 h-3"></i>
+                  </button>
+                </div>
+                <p class="text-sm font-medium">NT. ${(item.price * item.quantity).toLocaleString()}</p>
+              </div>
+            </div>
+          </div>`).join('');
+        
+        cartTotalAmount.textContent = `NT. ${totalAmount.toLocaleString()}`;
+        cartFooter.classList.remove('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    // ==========================================
+    // UI 控制邏輯 (Modal & Drawer)
+    // ==========================================
+
+    // 購物車抽屜
+    function toggleDrawer(open) {
+      if (open) {
+        cartDrawer.classList.remove('hidden');
+        // 延遲觸發以呈現動畫
+        setTimeout(() => {
+          cartOverlay.classList.remove('opacity-0');
+          drawerBody.classList.remove('translate-x-full');
+        }, 10);
+        
+        if (cart.length > 0) trackViewCart(); 
+        
+        // 防止背景滾動
+        document.body.style.overflow = 'hidden';
+      } else {
+        cartOverlay.classList.add('opacity-0');
+        drawerBody.classList.add('translate-x-full');
+        setTimeout(() => {
+          cartDrawer.classList.add('hidden');
+          document.body.style.overflow = '';
+        }, 500); // 配合 CSS transition duration
+      }
+    }
+
+    // 結帳 Modal
+    function toggleCustomerModal(open) {
+      if (open) {
+        customerModal.classList.remove('hidden');
+        setTimeout(() => { 
+          customerModal.classList.remove('opacity-0');
+          customerModalBody.classList.remove('scale-95', 'opacity-0'); 
+        }, 10);
+      } else {
+        customerModal.classList.add('opacity-0');
+        customerModalBody.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => customerModal.classList.add('hidden'), 300);
+      }
+    }
+
+    // 狀態提示 Modal
+    function showSuccessModal() {
+      successModal.classList.remove('hidden');
+      setTimeout(() => { 
+        successModal.classList.remove('opacity-0');
+        modalBody.classList.remove('scale-95', 'opacity-0'); 
+      }, 10);
+    }
+    
+    function hideSuccessModal() {
+      successModal.classList.add('opacity-0');
+      modalBody.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => successModal.classList.add('hidden'), 300);
+    }
+    
+    function showErrorModal(msg) {
+      errorMessage.textContent = msg || '發生未知錯誤，請稍後再試。';
+      errorModal.classList.remove('hidden');
+      setTimeout(() => { 
+        errorModal.classList.remove('opacity-0');
+        errorModalBody.classList.remove('scale-95', 'opacity-0'); 
+      }, 10);
+    }
+    
+    function hideErrorModal() {
+      errorModal.classList.add('opacity-0');
+      errorModalBody.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => errorModal.classList.add('hidden'), 300);
+    }
+
+    // Toast 提示
+    let toastTimeout;
+    function showToast(message) {
+      toastText.textContent = message;
+      toast.classList.remove('hidden', 'animate-fade-in-up');
+      // 強制重繪以重啟動畫
+      void toast.offsetWidth; 
+      toast.classList.add('animate-fade-in-up');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => { 
+        toast.classList.add('hidden'); 
+        toast.classList.remove('animate-fade-in-up');
+      }, 3000);
+    }
+
+    // ==========================================
+    // 訂單送出邏輯 (Supabase + GA4)
+    // ==========================================
+    async function handleOrderSubmit(e) {
+      e.preventDefault();
+
+      const name    = document.getElementById('custName').value.trim();
+      const phone   = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const account = document.getElementById('custAccount').value.trim();
+
+      if (!name || !phone || !address || !account) {
+        showErrorModal('請確認所有必填欄位皆已完整填寫。');
+        return;
+      }
+
+      // [事件6] 填寫付款資訊
+      trackAddPaymentInfo();
+
+      // UI 狀態切換：載入中
+      submitBtnText.classList.add('opacity-0');
+      submitSpinner.classList.remove('hidden');
+      submitOrderBtn.disabled = true;
+
+      const totalAmount = cart.reduce((a, i) => a + i.price * i.quantity, 0);
+      const mockTransactionId = 'ORD-' + new Date().getTime();
+
+      const orderRecord = {
+        customer_name:    name,
+        customer_phone:   phone,
+        customer_address: address,
+        remittance_last5: account,
+        items: cart.map(i => ({
+          product_id: i.id,
+          name:       i.name,
+          price:      i.price,
+          quantity:   i.quantity,
+          subtotal:   i.price * i.quantity
+        })),
+        total_amount: totalAmount,
+        status:       'pending',
+        created_at:   new Date().toISOString()
+      };
+
+      try {
+        const { data, error } = await supabase
+          .from(ORDERS_TABLE)
+          .insert([orderRecord])
+          .select();
+
+        if (error) throw error;
+        
+        const finalTransactionId = (data && data[0] && data[0].id) ? data[0].id : mockTransactionId;
+
+        // [事件7] 完成購買
+        trackPurchase(finalTransactionId);
+
+        // 重置狀態
+        cart = [];
+        orderForm.reset();
+        updateCartUI();
+
+        toggleCustomerModal(false);
+        setTimeout(showSuccessModal, 400);
+
+      } catch (err) {
+        console.error(' Supabase Insert Error:', err);
+        showErrorModal(`無法送出訂單：${err.message}`);
+      } finally {
+        submitBtnText.classList.remove('opacity-0');
+        submitSpinner.classList.add('hidden');
+        submitOrderBtn.disabled = false;
+      }
+    }
+
+    // ==========================================
+    // 事件監聽綁定
+    // ==========================================
+    // ==========================================
+    // 行動選單抽屜控制
+    // ==========================================
+    function toggleMobileMenu(open) {
+      if (open) {
+        mobileMenu.classList.remove('hidden');
+        setTimeout(() => {
+          mobileMenuOverlay.classList.remove('opacity-0');
+          mobileMenuBody.classList.add('menu-open');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileMenuOverlay.classList.add('opacity-0');
+        mobileMenuBody.classList.remove('menu-open');
+        setTimeout(() => {
+          mobileMenu.classList.add('hidden');
+          document.body.style.overflow = '';
+        }, 500);
+      }
+    }
+    menuBtn.addEventListener('click', () => toggleMobileMenu(true));
+    closeMenuBtn.addEventListener('click', () => toggleMobileMenu(false));
+    mobileMenuOverlay.addEventListener('click', () => toggleMobileMenu(false));
+
+    // ==========================================
+    // 搜尋列展開/收合
+    // ==========================================
+    searchBtn.addEventListener('click', () => {
+      searchBar.classList.toggle('search-open');
+      if (searchBar.classList.contains('search-open')) {
+        setTimeout(() => searchInput.focus(), 100);
+      }
+    });
+    searchInput.addEventListener('input', (e) => {
+      currentSearchTerm = e.target.value;
+      renderProducts();
+    });
+
+    // ==========================================
+    // 分類篩選（桌機分類列 + 行動選單分類）
+    // ==========================================
+    function setActiveCategory(category) {
+      currentCategory = category;
+      renderProducts();
+
+      // 更新桌機分類列 active 樣式
+      document.querySelectorAll('.category-link').forEach(link => {
+        if (link.dataset.category === category) {
+          link.classList.add('text-brand', 'font-medium', 'border-brand');
+          link.classList.remove('text-stone-400', 'border-transparent');
+        } else {
+          link.classList.remove('text-brand', 'font-medium', 'border-brand');
+          link.classList.add('text-stone-400', 'border-transparent');
+        }
+      });
+
+      // 更新行動選單分類 active 樣式
+      document.querySelectorAll('.mobile-category-link').forEach(link => {
+        if (link.dataset.category === category) {
+          link.classList.add('text-brand');
+          link.classList.remove('text-stone-500');
+        } else {
+          link.classList.remove('text-brand');
+          link.classList.add('text-stone-500');
+        }
+      });
+    }
+
+    document.querySelectorAll('.category-link, .mobile-category-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActiveCategory(link.dataset.category);
+        if (link.classList.contains('mobile-category-link')) {
+          toggleMobileMenu(false);
+        }
+        // 篩選後平滑捲動至商品區
+        document.getElementById('productGrid').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+
+    cartBtn.addEventListener('click', () => toggleDrawer(true));
+    closeCartBtn.addEventListener('click', () => toggleDrawer(false));
+    cartOverlay.addEventListener('click', () => toggleDrawer(false));
+    
+    // 開始結帳按鈕 -> [事件5] begin_checkout
+    checkoutBtn.addEventListener('click', () => { 
+      trackBeginCheckout();
+      toggleDrawer(false); 
+      // 延遲開啟 Modal 讓 Drawer 有時間關閉
+      setTimeout(() => toggleCustomerModal(true), 300);
+    });
+
+    closeCustomerBtn.addEventListener('click', () => toggleCustomerModal(false));
+    
+    backToCartBtn.addEventListener('click', () => { 
+      toggleCustomerModal(false); 
+      setTimeout(() => toggleDrawer(true), 300);
+    });
+    
+    orderForm.addEventListener('submit', handleOrderSubmit);
+    modalCloseBtn.addEventListener('click', hideSuccessModal);
+    errorCloseBtn.addEventListener('click', hideErrorModal);
+
+    // 綁定至 window 供 inline onClick 使用
+    window.handleAddToCart  = handleAddToCart;
+    window.changeQuantity   = changeQuantity;
+    window.handleRemoveItem = handleRemoveItem;
+    window.handleViewItem   = handleViewItem;
+    window.toggleDrawer     = toggleDrawer;
+
+    // ==========================================
+    // 初始載入
+    // ==========================================
+    window.onload = () => {
+      renderProducts();
+      updateCartUI();
+    };
+  </script>
+
+  <!-- ========================================== -->
+  <!-- PWA：安裝提示橫幅                             -->
+  <!-- ========================================== -->
+  <div id="installBanner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] bg-brand text-white px-6 py-4 shadow-xl flex items-center gap-4 max-w-[92vw]">
+    <i data-lucide="download" class="w-5 h-5 flex-shrink-0"></i>
+    <span class="text-sm font-light">將 SEOUL VIBE 加入主畫面，購物更快速。</span>
+    <button id="installBtn" class="text-xs font-bold tracking-widest uppercase border-b border-white pb-0.5 flex-shrink-0">Install</button>
+    <button id="dismissInstallBtn" aria-label="Dismiss" class="text-white/60 hover:text-white flex-shrink-0">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <script>
+    // ==========================================
+    // PWA：註冊 Service Worker
+    // ==========================================
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('[PWA] Service Worker registered:', reg.scope))
+          .catch(err => console.warn('[PWA] Service Worker registration failed:', err));
+      });
+    }
+
+    // ==========================================
+    // PWA：自訂「加入主畫面」安裝提示
+    // ==========================================
+    let deferredInstallPrompt = null;
+    const installBanner       = document.getElementById('installBanner');
+    const installBtn          = document.getElementById('installBtn');
+    const dismissInstallBtn   = document.getElementById('dismissInstallBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      if (!localStorage.getItem('sv_install_dismissed')) {
+        installBanner.classList.remove('hidden');
+        if (window.lucide) lucide.createIcons();
+      }
+    });
+
+    installBtn?.addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      installBanner.classList.add('hidden');
+    });
+
+    dismissInstallBtn?.addEventListener('click', () => {
+      installBanner.classList.add('hidden');
+      localStorage.setItem('sv_install_dismissed', '1');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installBanner.classList.add('hidden');
+      console.log('[PWA] App installed');
+    });
+  </script>
+</body>
+</html>
